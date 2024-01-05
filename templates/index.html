@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Welcome to my website!{% endblock %}
+
+{% block content %}  
+  <div class="container vertical-center">
+    <div class="form-group custom-border form-cell-width">
+        <h1>Insert Data</h1>
+        <form method="post" action="/submit">
+            <label for="payment_date">Payment Date:</label>
+            <input type="date" class="form-control" name="payment_date" id="payment_date" required><br>
+            <label for="birth_date">Date of birth:</label>
+            <input type="date" class="form-control" name="birth_date" id="birth_date" required><br>
+            <label for="name">Last Name:</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Last Name" required><br>
+            <label for="amount">$ Amount:</label>
+            <input type="number" class="form-control" name="amount" id="amount" step="0.01" min="0" placeholder="$ Amount" required><br/>
+            <div class="center-inner">
+                <input type="submit" class="btn btn-primary" value="Submit">
+            </div>
+        </form>
+    </div>
+</div>
+<div class="container vertical-center">
+    <div class="custom-border center-inner form-cell-width">
+        <h1>Show Data</h1>
+        <table class="table">
+            <tr>
+                <th>Payment Date</th>
+                <th>Birth Date</th>
+                <th>Name</th>
+                <th>Amount in $</th>
+            </tr>
+            {% for row in data %}
+            <tr data-id="{{ row[4] }}">
+                <td contenteditable="true" id="cell.payment_date">{{ row[0] }}</td>
+                <td contenteditable="true" id="cell.birth_date">{{ row[1] }}</td>
+                <td contenteditable="true" id="cell.name">{{ row[2] }}</td>
+                <td contenteditable="true" id="cell.amount">{{ row[3] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+h1 {
+    color:black;
+    font-size: 46px;
+}
+
+body {
+    background: white;
+}
+
+.center-inner {
+    text-align: center;
+}
+.vertical-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+}
+
+.form-cell-width {
+    width: 100%;
+}
