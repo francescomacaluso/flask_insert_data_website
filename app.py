@@ -1,23 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import psycopg2
-from config import db_params  # Import the db_params from the external config module
+from config import db_params
 from flask.helpers import flash
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # Connect to the database
+
     conn = psycopg2.connect(**db_params)
     cursor = conn.cursor()
 
-    # Query the data from the table
     cursor.execute("SELECT payment_date, birth_date, name, amount, id FROM public_test.payments order by id asc;")
     rows = cursor.fetchall()
 
     rounded_rows = [(row[0], row[1], row[2], round(row[3], 2),row[4]) for row in rows]
 
-    # Close the cursor and connection
     cursor.close()
     conn.close()
 
@@ -35,9 +33,8 @@ def submit():
         conn = psycopg2.connect(**db_params)
         cursor = conn.cursor()
         cursor.execute("INSERT INTO public_test.payments (payment_date, birth_date, name, amount) VALUES (%s, %s, %s, %s)", (payment_date, birth_date, name, amount))
-        conn.commit()  # Commit the changes to the database
+        conn.commit() 
 
-        # Close the cursor and connection
         cursor.close()
         conn.close()
 
@@ -45,11 +42,10 @@ def submit():
 
 @app.route('/chart')
 def chart():
-    # Connect to the database
+
     conn = psycopg2.connect(**db_params)
     cursor = conn.cursor()
 
-    # Query the data from the table
     cursor.execute("SELECT name, sum(amount) as amount FROM public_test.payments group by name order by amount desc;")
 
     rows = cursor.fetchall()
@@ -59,7 +55,6 @@ def chart():
         'amount': [round(row[1], 2) for row in rows]
     }
 
-    # Close the cursor and connection
     cursor.close()
     conn.close()
 
@@ -71,11 +66,10 @@ def edit(id):
     cursor = conn.cursor()
 
     if request.method == 'GET':
-        # Retrieve the existing data for the specified ID
+ 
         cursor.execute("SELECT payment_date, birth_date, name, amount FROM public_test.payments WHERE id = %s", (id,))
         row = cursor.fetchone()
 
-        # Close the cursor and connection
         cursor.close()
         conn.close()
 
@@ -86,7 +80,7 @@ def edit(id):
             return redirect(url_for('index'))
 
     elif request.method == 'POST':
-        # Update the data in the database
+
         payment_date = request.form['payment_date']
         birth_date = request.form['birth_date']
         name = request.form['name']
@@ -96,7 +90,6 @@ def edit(id):
                        (payment_date, birth_date, name, amount, id))
         conn.commit()
 
-        # Close the cursor and connection
         cursor.close()
         conn.close()
 
@@ -107,11 +100,9 @@ def remove(id):
     conn = psycopg2.connect(**db_params)
     cursor = conn.cursor()
 
-    # Remove the record with the specified ID
     cursor.execute("DELETE FROM public_test.payments WHERE id = %s", (id,))
     conn.commit()
 
-    # Close the cursor and connection
     cursor.close()
     conn.close()
 
