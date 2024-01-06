@@ -24,11 +24,6 @@ def index():
 
     return render_template('index.html', data=rounded_rows)
 
-@app.route('/about')
-def about():
-    names = ["John","Sally"]
-    return render_template('about.html',names=names)
-
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -49,63 +44,43 @@ def submit():
 
         return redirect(url_for('index'))
 
-@app.route('/update', methods=['POST'])
-def update():
-    if request.method == 'POST':
-        data = request.get_json()
-        updated_value = data.get('updatedValue')
-        column_name = data.get('columnName')
-        record_id = data.get('id')
+# @app.route('/update', methods=['POST'])
+# def update():
+#     if request.method == 'POST':
+#         data = request.get_json()
+#         updated_value = data.get('updatedValue')
+#         column_name = data.get('columnName')
+#         record_id = data.get('id')
 
-        try:
-            # Whitelist of allowed column names
-            allowed_columns = ['payment_date', 'birth_date', 'name', 'amount']
+#         try:
+#             # Whitelist of allowed column names
+#             allowed_columns = ['payment_date', 'birth_date', 'name', 'amount']
 
-            # Check if the column_name is allowed
-            if column_name not in allowed_columns:
-                return jsonify({'error': 'Invalid column name'})
+#             # Check if the column_name is allowed
+#             if column_name not in allowed_columns:
+#                 return jsonify({'error': 'Invalid column name'})
 
-            # Connect to the PostgreSQL database using your db_params
-            conn = psycopg2.connect(**db_params)
-            cursor = conn.cursor()
+#             # Connect to the PostgreSQL database using your db_params
+#             conn = psycopg2.connect(**db_params)
+#             cursor = conn.cursor()
 
-            # Construct the SQL query using a parameterized query
-            # This ensures that user input is properly escaped and quoted
-            sql_query = f"UPDATE public_test.payments SET {column_name} = %s WHERE id = %s;"
+#             # Construct the SQL query using a parameterized query
+#             # This ensures that user input is properly escaped and quoted
+#             sql_query = f"UPDATE public_test.payments SET {column_name} = %s WHERE id = %s;"
 
-            # Execute the query with the updated value and the 'id' as a condition
-            cursor.execute(sql_query, (updated_value, record_id))
-            conn.commit()
+#             # Execute the query with the updated value and the 'id' as a condition
+#             cursor.execute(sql_query, (updated_value, record_id))
+#             conn.commit()
 
-            # Close the cursor and connection
-            cursor.close()
-            conn.close()
+#             # Close the cursor and connection
+#             cursor.close()
+#             conn.close()
 
-            return jsonify({'message': f'{column_name} updated successfully'})
+#             return jsonify({'message': f'{column_name} updated successfully'})
 
-        except Exception as e:
-            # Handle any database connection or query errors
-            return jsonify({'error': str(e)})
-
-@app.route('/subscribe')
-def subscribe():
-    title = "Subscribe to my Newsletter!"
-    return render_template("subscribe.html", title=title)
-
-subscribers = []
-
-@app.route('/form', methods=["POST"])
-def form():
-    first_name = request.form.get("first_name")
-    last_name = request.form.get("last_name")
-    email = request.form.get("email")
-    title = "Thank You!"
-    subscribers.append(f"{first_name} {last_name} | {email}")
-    print(f"First Name: {first_name}")
-    print(f"Last Name: {last_name}")
-    print(f"Email: {email}")
-
-    return render_template("form.html", title=title,subscribers=subscribers)
+#         except Exception as e:
+#             # Handle any database connection or query errors
+#             return jsonify({'error': str(e)})
 
 @app.route('/chart')
 def chart():

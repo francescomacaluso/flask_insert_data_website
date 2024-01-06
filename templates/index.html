@@ -32,10 +32,10 @@
             </tr>
             {% for row in data %}
             <tr data-id="{{ row[4] }}">
-                <td contenteditable="true" id="cell.payment_date">{{ row[0] }}</td>
-                <td contenteditable="true" id="cell.birth_date">{{ row[1] }}</td>
-                <td contenteditable="true" id="cell.name">{{ row[2] }}</td>
-                <td contenteditable="true" id="cell.amount">{{ row[3] }}</td>
+                <td id="cell.payment_date">{{ row[0] }}</td>
+                <td id="cell.birth_date">{{ row[1] }}</td>
+                <td id="cell.name">{{ row[2] }}</td>
+                <td id="cell.amount">{{ row[3] }}</td>
             </tr>
             {% endfor %}
         </table>
